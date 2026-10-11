@@ -8,7 +8,9 @@ services:
     image: ai-drama:latest
     container_name: ai-drama
     ports:
-      - "8008:8008"
+      # 只绑定本机回环：无鉴权服务不应暴露到局域网/公网
+      # 如需外部访问，请先自行加反向代理鉴权与知识库目录限制
+      - "127.0.0.1:8008:8008"
     volumes:
       # 会话数据 / 角色记忆 / config.json（含 api_key）持久化到宿主机
       - ./data:/app/data
