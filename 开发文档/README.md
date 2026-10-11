@@ -7,7 +7,7 @@
 
 - **项目目录**：`<项目目录>`
 - **默认端口**：8008（原 8000 被 SillyTavern 占用，故改用 8008）
-- **技术栈**：Python 3.14 + FastAPI + uvicorn + httpx（LLM 直连）/ 原生 HTML+CSS+JS 前端
+- **技术栈**：Python 3.10+（开发机 3.14 / Docker 镜像 3.12）+ FastAPI + uvicorn + httpx（LLM 直连）/ 原生 HTML+CSS+JS 前端
 - **知识库**：任意目录均可作为"一个世界"的知识库（**无默认路径**，创建会话时手动选择，
   可用路径框右侧「📂 浏览」预览并选择）；按 **Character / Memory / World** 三文件夹读取，
   `Character/`=角色档案、`Memory/`=角色初始长期记忆、`World/`=世界观背景（缺失自动新建）

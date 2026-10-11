@@ -39,6 +39,34 @@ data/sessions/<会话ID>/
 - 也支持**环境变量**：`AIDRAMA_API_KEY` / `AIDRAMA_BASE_URL` / `AIDRAMA_MODEL`（优先级高于配置文件，适合容器部署，不必落盘）。
 - 不写入代码、不打日志、不写入任何数据文件（除非你在 UI 中主动保存）。
 
+## 前置条件
+
+### 必需（本地运行）
+
+| 项 | 要求 | 说明 |
+|---|---|---|
+| **Python** | **≥ 3.10**（推荐 3.12+） | 依赖见 `requirements.txt`；Docker 镜像基于 `python:3.12-slim` |
+| **LLM API Key** | 任意 OpenAI 兼容服务 | 如 DeepSeek（`https://api.deepseek.com`）；**必填**，否则无法对话 |
+| **网络** | 能访问你的 LLM `base_url` | 容器内同样需要出网 |
+| **可写目录** | 项目下的 `data/` | 存会话 / 角色记忆 / `config.json`；可用环境变量 `AIDRAMA_DATA_DIR` 改 |
+| **端口** | 默认 **8008** 空闲 | 冲突时启动加 `--port 其它端口` |
+| **浏览器** | 现代浏览器 | Chrome / Edge / Firefox / Safari 均可，无需构建工具 |
+
+### 可选
+
+| 项 | 说明 |
+|---|---|
+| **Docker + Compose v2** | **非必需**。想用容器一键跑再装，见「方式三」 |
+
+### 平台差异
+
+- 核心功能跨平台（Windows / macOS / Linux）。
+- 新建会话时的「📂 浏览」按钮（原生文件夹选择）**仅 Windows 可用**；**macOS / Linux / Docker 里请手动填写知识库目录的绝对路径**。
+- 本项目是**单用户、无鉴权**工具，请只在 `127.0.0.1` 使用（见下方「安全提示」）。
+
+> **需要装 Docker 吗？** 不需要。直接 `pip install -r requirements.txt` + 起 uvicorn 即可（方式一 / 方式二）。
+> Docker 只是把 Python 和依赖打包好，适合"本机不想装 Python"或"想一条命令起服务"的场景。
+
 ## 快速开始
 
 ### 方式一：直接体验示例（推荐先跑这个）
@@ -77,6 +105,23 @@ python -m uvicorn backend.main:app --host 127.0.0.1 --port 8008
 - `Memory/`：角色长期记忆，按文件名归到对应角色，创建角色时作为其初始长期记忆；
 - `World/`：世界观背景与规则；建立 `背景/`、`词条/`、`文风/` 子目录后自动启用「常驻 + 关键词词条」机制；
 三目录缺失时，新建会话会自动创建。
+
+### 方式三：Docker（可选）
+
+需要 **Docker** 与 **Compose v2**（用 `docker compose`，不是老的 `docker-compose`）。
+
+```bash
+# 启动（默认只绑定本机 127.0.0.1:8008）
+docker compose up --build
+
+# 离线回放评测（可选）
+docker compose run --rm app python -m backend.eval.replay
+```
+
+- API Key 用环境变量传入：`AIDRAMA_API_KEY=sk-... docker compose up`（或挂载 `data/config.json`）。
+- ⚠️ **容器里没有桌面环境**，「📂 浏览」不可用，必须**手动填写知识库路径**；
+  而且知识库目录要在**容器内可见**——在 `compose.yaml` 里按需挂载（模板已给出注释示例，可挂载 `examples/demo-kb` 到容器内 `/kb`）。
+- 镜像**不含** `examples/`、`tests/`、`reports/`（保持精简），示例知识库请用挂载方式提供。
 
 ## ⚠️ 安全提示（务必阅读）
 

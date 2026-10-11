@@ -14,6 +14,8 @@ services:
     volumes:
       # 会话数据 / 角色记忆 / config.json（含 api_key）持久化到宿主机
       - ./data:/app/data
+      # 知识库目录：容器内「📂 浏览」不可用，需手动填容器内路径；按需挂载你自己的知识库或示例
+      # - ./examples/demo-kb:/kb:ro        # 挂载示例知识库 → 新建会话时填 /kb
     environment:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
