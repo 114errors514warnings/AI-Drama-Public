@@ -1,0 +1,27 @@
+# AI Drama · 一键运行（含评测）
+# 用法：
+#   docker compose up --build            # 启动 Web 应用 → http://127.0.0.1:8008
+#   docker compose run --rm app python -m backend.eval.replay   # 离线回放评测
+services:
+  app:
+    build: .
+    image: ai-drama:latest
+    container_name: ai-drama
+    ports:
+      - "8008:8008"
+    volumes:
+      # 会话数据 / 角色记忆 / config.json（含 api_key）持久化到宿主机
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+  # 一次性评测任务：跑离线回放并产出 reports/replay_*.md/.json
+  eval:
+    build: .
+    image: ai-drama:latest
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+    command: ["python", "-m", "backend.eval.replay"]
+    profiles: ["eval"]
