@@ -174,3 +174,10 @@ python -m backend.eval.replay           # L2：离线回放 + 硬门禁，产出
 > Docker 部署时，API Key 用环境变量传入即可：`AIDRAMA_API_KEY`（或挂载 `data/config.json` 的 `api_key` 字段）。
 > 详见 `开发文档/公共化改造方案.md`。
 
+## 许可证
+
+本项目基于 [MIT License](LICENSE) 开源。
+
+`examples/` 下的示例知识库（角色 A / B / C、校园世界观、剧情）均为**合成虚构**，与任何真实作品无关。
+
+

@@ -4,12 +4,11 @@ start.ps1
 stop.bat
 stop.ps1
 
+# 本机发布脚本（把开发仓库同步到公开仓库，仅本地使用，不随仓库发布）
+scripts/publish-public.ps1
+
 # 运行时数据（含 API Key、会话记录、角色记忆）
 data/
-
-# 环境变量（可能含真实 API Key）
-.env
-.env.local
 
 # 本地工具产物（Archify 图 / AI 记忆），不随仓库发布
 .archify/
